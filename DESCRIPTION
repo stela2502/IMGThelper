@@ -17,7 +17,9 @@ Encoding: UTF-8
 LazyData: true
 Depends:
     R (>= 3.4.0),
-    R6
+    R6,
+    treemap,
+    dplyr
 Imports: 
 	stringr,
 	methods
