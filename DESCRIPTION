@@ -1,0 +1,26 @@
+Package: IMGThelper
+Title: An R package to access IMGT reult files
+Version: 0.0.0.9000
+Authors@R: c(
+    person(given = "Stefan",
+           family = "Lang",
+           role = c("aut", "cre"),
+           email = "Stefan.Lang@med.lu.se",
+           comment = c(ORCID = "https://orcid.org/0000-0002-0854-2328")
+           ),
+     person(given = 'Stijn', family='Vanhee', role=c("aut"),email = "stijn.vanhee@med.lu.se")
+     )
+Description: Implement certain plotting functions for IMGT data and allows IMGT data to be linked against a SingleCells object.
+	Thereby allowing the SingleCells object to be clustered using the IMGT information.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Depends:
+    R (>= 3.4.0),
+    R6
+Imports: 
+	stringr,
+	methods
+Suggests: 
+    testthat
+RoxygenNote: 6.1.1
