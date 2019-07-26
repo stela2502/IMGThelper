@@ -5,23 +5,38 @@
 #' @description select productively recombined VDJ recombination evens from the Junctions file
 #' @param x the IMGThelper object
 #' @param fname the file to read from default=file.path(x$path, '6_Junction.txt') 
+#' @param OK the ids to select (default = function(data) { which(data$V.DOMAIN.Functionality == 'productive' & ! data$D.GENE.and.allele == "" & ! data$CDR3.IMGT == "" & ! data$CDR3.IMGT == "NA")} )
 #' @title select only productively recombined VDJ segments
 #' @export 
 setGeneric('productive', ## Name
-	function (x, fname=file.path(x$path, '6_Junction.txt') ) { ## Argumente der generischen Funktion
+	function (x, fname=file.path(x$path, '6_Junction.txt'),OK =function(data) { which(data$V.DOMAIN.Functionality == 'productive' & ! data$D.GENE.and.allele == "" & ! data$CDR3.IMGT == "" & ! data$CDR3.IMGT == "NA")} ) { ## Argumente der generischen Funktion
 		standardGeneric('productive') ## der Aufruf von standardGeneric sorgt für das Dispatching
 	}
 )
 
 setMethod('productive', signature = c ('IMGThelper'),
-	definition = function (x, fname=file.path(x$path, '6_Junction.txt') ) {
-	data <- read.delim(file= fname )
+	definition = function (x, fname='6_Junction.txt' , OK = function(data) { which(data$V.DOMAIN.Functionality == 'productive' & ! data$D.GENE.and.allele == "" & ! data$CDR3.IMGT == "" & ! data$CDR3.IMGT == "NA")} ) {
+	data <- open(x, fname )
+	if ( ! is.function( OK ) ) {
+  		stop( "OK needs to be a function to select from the read table a list of row ids.")
+  	}else {
+  		ok = OK(data)
+  	}
+ 	productive <- data[ ok ,c( "V.GENE.and.allele","D.GENE.and.allele", "J.GENE.and.allele", "CDR3.IMGT..AA.", "CDR3.IMGT", 'Sequence.ID', 'V.DOMAIN.Functionality')]
+ 	
+ 	if ( nrow(productive) == 0 ){
+  		stop("No productive VDJ recombination events detected" )
+  	}
 
-  	OK = which(data$V.DOMAIN.Functionality == 'productive' & ! data$D.GENE.and.allele == "" & ! data$CDR3.IMGT == "" & ! data$CDR3.IMGT == "NA")
- 	productive <- data[ OK ,c( "V.GENE.and.allele","D.GENE.and.allele", "J.GENE.and.allele", "CDR3.IMGT..AA.", "CDR3.IMGT") ]
- 	prod<- as.data.frame(str_split_fixed(productive$V.GENE.and.allele, "\\*", n=2))
-  colnames(prod)<-c("V","rest")
-  productive<-cbind(prod$V, productive)
-  colnames(productive)<-c("a","V.GENE.and.allele","D.GENE.and.allele", "J.GENE.and.allele", "CDR3.IMGT..AA.", "CDR3.IMGT")
+ 	prod<- as.data.frame(stringr::str_split(productive$V.GENE.and.allele, "\\*", n=2))
+  	colnames(prod)<-c("V","rest")
+  	productive<-cbind(prod$V, productive)
+  	colnames(productive)<-c("a","V.GENE.and.allele","D.GENE.and.allele", "J.GENE.and.allele", "CDR3.IMGT..AA.", "CDR3.IMGT", 'Sequence.ID', 'V.DOMAIN.Functionality')
+
+  	cell_ids <- table(unlist(lapply(stringr::str_split(productive[,'Sequence.ID'], '_'), function(x){x[1]})))
+  	x$cells$Productive = 0
+  	x$cells$Productive[ match( names(cell_ids), x$cells$cellID) ] = cell_ids
  	productive
 } )
+
+

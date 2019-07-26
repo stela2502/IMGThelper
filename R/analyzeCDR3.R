@@ -9,13 +9,13 @@
 #' @title description of function analyzeCDR3
 #' @export 
 setGeneric('analyzeCDR3', ## Name
-	function (x, fname=file.path(x$path, '6_Junction.txt'), OK=NULL ) { ## Argumente der generischen Funktion
+	function (x, fname= '6_Junction.txt', OK=NULL ) { ## Argumente der generischen Funktion
 		standardGeneric('analyzeCDR3') ## der Aufruf von standardGeneric sorgt für das Dispatching
 	}
 )
 
 setMethod('analyzeCDR3', signature = c ('IMGThelper'),
-	definition = function (x, fname=file.path(x$path, '6_Junction.txt'), OK=NULL ) {
+	definition = function (x, fname= '6_Junction.txt', OK=NULL ) {
 
   if ( ! file.exists(fname) ){
   	stop("I need a existing file loaction at start up (fname)" )

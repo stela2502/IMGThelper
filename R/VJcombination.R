@@ -14,21 +14,27 @@ setGeneric('VJcombination', ## Name
 )
 
 setMethod('VJcombination', signature = c ('IMGThelper'),
-	definition = function (x, fname=file.path(x$path, '6_Junction.txt')  ) {
+	definition = function (x, fname='6_Junction.txt'  ) {
   
-  VHorder = read.delim(file=  system.file("extdata", "IGHVorder3.txt", package = "IMGThelper") )
+  VHorder = read.delim( file = system.file("extdata", "IGHVorder3.txt", package = "IMGThelper") )
   
+  productive = productive( x, fname = fname )
   tab<-as.data.frame(paste(productive[,1],productive[,3],productive[,4],productive[,5],productive[,6], sep="&"))
 
   colnames(tab)<-c( "lala")
   plot<-as.data.frame(table(tab))
-  number<-(nrow(productive)/numbers[i,2])
+  #number<-(nrow(productive)/numbers[i,2])
   #select on reads
   lessthan5<-subset(plot, plot$Freq <5)
-  morethan5<-subset(plot, plot$Freq >5 & plot$Freq>number )
+
+  #morethan5<-subset(plot, plot$Freq >5 & plot$Freq>number )
+  morethan5<-subset(plot, plot$Freq >5 )
   
   more2<-as.data.frame(tab[which((match(tab[,1], morethan5[,1])>=1) == TRUE),c( "lala")])
-  more<-as.data.frame(str_split_fixed(more2[,1], "&", n=5))
+  more<-as.data.frame(stringr::str_split(more2[,1], "&", n=5))
+  if ( nrow( more ) == 0 ) {
+    stop( "This dataset does not contain a single element passing the threshold!" )
+  }
   colnames(more)<-c("V", "D", "J", "CDR3AA", "CDR3nt")
   
   a<-as.data.frame(more$V)

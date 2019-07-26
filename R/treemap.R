@@ -19,16 +19,16 @@ setMethod('treemap', signature = c ('IMGThelper'),
 
 	  out <- tree( x )
 
-  clones<-nrow(out)
+    clones<-nrow(out)
 
-  out.title<-paste(name,";", clones, "in this treemap")
+    out.title<-paste(name,";", clones, "in this treemap")
  
-  figure.fname<-paste(name2, "list with", clones, "clones in treemap", paste= " ")
+    figure.fname<-paste(name2, "list with", clones, "clones in treemap", paste= " ")
   
-  pdf( ofile, width=7, height=7)
-  treemap(out, index=c("CDR3"), vSize="Freq", vColor="color", type="color",
+    pdf( ofile, width=7, height=7)
+    treemap(out, index=c("CDR3"), vSize="Freq", vColor="color", type="color",
   	algorithm="squarified",fontsize.labels=10,sortID="size",title=out.title, 
   	border.lwds=0.5, drop.unused.levels = FALSE)
-  dev.off()
+    dev.off()
   
 } )
