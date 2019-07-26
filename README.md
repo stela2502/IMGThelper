@@ -14,9 +14,8 @@ The package is under heavy development and I strongly discurrage a usage of the 
 
 To install the package I recommend the devtools R package:
 
-´´´
-#install.packages(c('devtools'))
-library(devtools)
-install_github( 'stela2502/IMGThelper', ref='master')
+```{R}
+  #install.packages(c('devtools'))
+  library(devtools)
+  install_github( 'stela2502/IMGThelper', ref='master')
 ```
-
