@@ -6,7 +6,7 @@
 \alias{stack,IMGThelper-method}
 \title{description of function stack}
 \usage{
-stack(x, fname = "6_Junction.txt", splitAt = 5)
+stack(x, fname = "6_Junction.txt", splitAt = 5, ...)
 }
 \arguments{
 \item{x}{the IMGThelper object}
@@ -14,6 +14,8 @@ stack(x, fname = "6_Junction.txt", splitAt = 5)
 \item{fname}{the file for the input Junctions default file.path(x$path, '6_Junction.txt')}
 
 \item{splitAt}{separate the plot at splitAt (ask Stijn of how to phrase that) default= 5}
+
+\item{...}{additional option passed to the tree function}
 }
 \description{
 Create the data structure required for the stached_boxplot

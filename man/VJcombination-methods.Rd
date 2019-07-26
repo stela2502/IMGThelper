@@ -6,12 +6,12 @@
 \alias{VJcombination,IMGThelper-method}
 \title{Ask Stijn about this function!}
 \usage{
-VJcombination(x, fname = file.path(x$path, "6_Junction.txt"))
+VJcombination(x, splitAt = 5)
 }
 \arguments{
 \item{x}{the IMGThelper object}
 
-\item{fname}{the file to parse default=file.path(x$path, '6_Junction.txt')}
+\item{splitAt}{separate the plot at splitAt (ask Stijn of how to phrase that) default= 5}
 }
 \description{
 Function to create VJ_usage.csv files used for the Chord diagrams

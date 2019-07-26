@@ -6,7 +6,7 @@
 \alias{treemap,IMGThelper-method}
 \title{description of function treemap}
 \usage{
-treemap(x, name, ofile)
+treemap(x, name, ofile, ...)
 }
 \arguments{
 \item{x}{the IMGThelper object}
@@ -14,6 +14,8 @@ treemap(x, name, ofile)
 \item{name}{the experiment this VDJ analysis came from}
 
 \item{ofile}{the pdf file name}
+
+\item{...}{options for the tree function}
 }
 \description{
 draw a treemap of clone sizes

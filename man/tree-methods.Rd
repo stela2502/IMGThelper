@@ -6,10 +6,14 @@
 \alias{tree,IMGThelper-method}
 \title{description of function tree}
 \usage{
-tree(x)
+tree(x, splitAt = 5, color = NULL)
 }
 \arguments{
 \item{x}{the IMGThelper object}
+
+\item{splitAt}{separate the plot at splitAt (ask Stijn of how to phrase that) default= 5}
+
+\item{color}{a global CDR3 vs color table ( default NULL -> rainbow colors)}
 }
 \description{
 create the data table used for the treemap plots (based on 6_Junctions.txt)

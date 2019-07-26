@@ -6,7 +6,7 @@
 \alias{stacked_bargraph,IMGThelper-method}
 \title{description of function stacked_bargraph}
 \usage{
-stacked_bargraph(x, ofile, name)
+stacked_bargraph(x, ofile, name, ...)
 }
 \arguments{
 \item{x}{the IMGThelper object}
@@ -14,6 +14,8 @@ stacked_bargraph(x, ofile, name)
 \item{ofile}{the outfile (pdf)}
 
 \item{name}{the name of this sample}
+
+\item{...}{options for the stack function}
 }
 \description{
 create a stacked_bargraph based on the 6_Juntions.txt file

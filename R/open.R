@@ -16,5 +16,7 @@ setGeneric('open', ## Name
 setMethod('open', signature = c ('IMGThelper'),
 	definition = function ( x, name= '6_Junction.txt' ) {
 	fname=file.path(x$path, name )
-	read.delim(file= fname )
+	data = data.table::fread(file= fname, sep="\t", fill=TRUE )
+	colnames(data) = make.names(colnames(data))
+	data
 } )

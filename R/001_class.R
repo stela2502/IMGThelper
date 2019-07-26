@@ -25,6 +25,7 @@ IMGThelper <- #withFormalClass(
 		print = function(...) {
 			cat (paste("An object of class", paste(collapse="::",rev(class(self))),"\n" ) )
 			cat("reading from path ",self$path,"\n")
+			cat( paste("with information about" , nrow(self$cells), "cells (or DNA elements)" ,"\n" ))
 		},
 		initialize = function ( path ) {
 			if (!dir.exists( path ) ){
@@ -48,20 +49,27 @@ IMGThelper <- #withFormalClass(
 			self$version = utils::sessionInfo('IMGThelper')$otherPkgs$IMGThelper$Version
 
 			## now populate the cells table with as much info as you can get..
-
-			sum = read.delim( file.path( self$path, '1_Summary.txt') )
+			print ( "loading initial information" )
+			sum = data.table::fread( file.path( self$path, '1_Summary.txt'), sep="\t", fill=TRUE )
+			colnames(sum) = make.names(colnames(sum))
 			## from a 10x experiment you get Sequence.ID as e.g. AAACCTGTCTGTCTAT-1_contig_1
 			## (cell_id)_contig_(conmtig_id)
-			cell_ids <- table(unlist(lapply(stringr::str_split(sum[,'Sequence.ID'], '_'), function(x){x[1]})))
+			#browser()
+			cell_ids <- unlist(lapply(stringr::str_split(t(sum[,'Sequence.ID']), '_'), function(x){x[1]}))
+			sum  = cbind( sum, cell_ids = cell_ids )
+			cell_ids <- table( cell_ids )
 			self$cells = data.frame(t(cell_ids))[,c(2,3)]
 			colnames(self$cells) = c('cellID', 'nContigs' )
-			Segemnts = Functions = NULL
-			for ( id in self$cells[,'cellID']) {
-				Segemnts = c( Segemnts, paste( collapse="; ", t(sum[grep( id, sum[,'Sequence.ID']), 'V.GENE.and.allele' ])))
-				Functions = c( Functions, paste( collapse="; ", t(sum[grep( id, sum[,'Sequence.ID']), 'V.DOMAIN.Functionality' ])))
-			}
-			self$cells$V.GENE.and.allele = Segemnts
-			self$cells$V.DOMAIN.Functionality = Functions
+			#Segemnts = Functions = vector( 'character', nrow( self$cells) )
+			#l = 0
+			#for ( id in self$cells[,'cellID']) {
+			#	l = l +1
+			#	OK =  which(is.na(match( t(sum[,'Sequence.ID']), id))==F)
+			#	Segemnts[l] = c( Segemnts, paste( collapse="; ", t(sum[OK, 'V.GENE.and.allele' ])))
+			#	Functions[l] = c( Functions, paste( collapse="; ", t(sum[OK, 'V.DOMAIN.Functionality' ])))
+			#}
+			#self$cells$V.GENE.and.allele = Segemnts
+			#self$cells$V.DOMAIN.Functionality = Functions
 			self
 		} )
 	)

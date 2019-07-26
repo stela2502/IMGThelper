@@ -15,11 +15,16 @@ setGeneric('productive', ## Name
 )
 
 setMethod('productive', signature = c ('IMGThelper'),
-	definition = function (x, fname='6_Junction.txt' , OK = function(data) { which(data$V.DOMAIN.Functionality == 'productive' & ! data$D.GENE.and.allele == "" & ! data$CDR3.IMGT == "" & ! data$CDR3.IMGT == "NA")} ) {
+	definition = function (x, fname='6_Junction.txt' , OK = function(data) { which( t(data[,'V.DOMAIN.Functionality']) == 'productive' & ! t(data[,'D.GENE.and.allele']) == "" & ! t(data[,'CDR3.IMGT']) == "" & ! t(data[,'CDR3.IMGT'])	 == "NA")} ) {
+	if ( ! is.null(x$usedObj$productive) ) {
+		print ("returning the previousely analyzed productiuve elements" )
+		return ( x$usedObj$productive )
+	}	
 	data <- open(x, fname )
 	if ( ! is.function( OK ) ) {
   		stop( "OK needs to be a function to select from the read table a list of row ids.")
   	}else {
+  		#browser()
   		ok = OK(data)
   	}
  	productive <- data[ ok ,c( "V.GENE.and.allele","D.GENE.and.allele", "J.GENE.and.allele", "CDR3.IMGT..AA.", "CDR3.IMGT", 'Sequence.ID', 'V.DOMAIN.Functionality')]
@@ -36,6 +41,7 @@ setMethod('productive', signature = c ('IMGThelper'),
   	cell_ids <- table(unlist(lapply(stringr::str_split(productive[,'Sequence.ID'], '_'), function(x){x[1]})))
   	x$cells$Productive = 0
   	x$cells$Productive[ match( names(cell_ids), x$cells$cellID) ] = cell_ids
+  	x$usedObj$productive = productive
  	productive
 } )
 

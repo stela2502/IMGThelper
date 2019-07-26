@@ -4,48 +4,43 @@
 #' @docType methods
 #' @description create the data table used for the treemap plots (based on 6_Junctions.txt)
 #' @param x the IMGThelper object
+#' @param splitAt separate the plot at splitAt (ask Stijn of how to phrase that) default= 5
+#' @param color a global CDR3 vs color table ( default NULL -> rainbow colors)
 #' @title description of function tree
 #' @export 
 setGeneric('tree', ## Name
-	function ( x ) { ## Argumente der generischen Funktion
+	function ( x, splitAt = 5, color=NULL ) { ## Argumente der generischen Funktion
 		standardGeneric('tree') ## der Aufruf von standardGeneric sorgt für das Dispatching
 	}
 )
 
 setMethod('tree', signature = c ('IMGThelper'),
-	definition = function ( x ) {
+	definition = function ( x, splitAt = 5, color=NULL ) {
+    if ( ! is.null(x$usedObj$treeDat )) {
+      return (x$usedObj$treeDat )
+    }
 
-	productive = productive(x)
-
-  #unique<-unique(productive)
-  tab<-as.data.frame(paste(productive[,1],productive[,2],productive[,3],productive[,4],productive[,5], sep="&"))
-  colnames(tab)<-c( "lala")
-  plot<-as.data.frame(table(tab))
-  #number<-(nrow(productive)/numbers[i,2])
-  #select on reads
-  lessthan5<-subset(plot, plot$Freq <5)
-  #morethan5<-subset(plot, plot$Freq >=5 & plot$Freq>number )
-  morethan5<-subset(plot, plot$Freq >=5 )
-
-  more2<-as.data.frame(tab[which((match(tab[,1], morethan5[,1])>=1) == TRUE),c( "lala")])
-  more<-as.data.frame(stringr::str_split(more2[,1], "&", n=5))
-  if ( nrow( more ) == 0 ) {
-    stop( "This dataset does not contain a single element passing the threshold!" )
-  }
-  colnames(more)<-c("V", "D", "J", "CDR3AA", "CDR3nt")
+    more = recurringProductives( x, cutoff= splitAt)
   
-  #tmoreVJCDR3<-paste(more$V, more$J,more$CDR3AA, sep="&")
-  #tabmore<-as.data.frame(table(tmoreVJCDR3))
   tabmore<-as.data.frame(table(more$CDR3AA))
   colnames(tabmore)<-c("CDR3", "Freq")
-  #treemore<-as.data.frame(str_split_fixed(tabmore[,1], "&", n=3))
-  #treemoreV<-as.data.frame(treemore[,1])
-  #treemoreVJ<-as.data.frame(paste(treemore[,1], treemore[,2]))
-  #treemoreVJCDR3<-as.data.frame(paste(treemore[,1], treemore[,2], treemore[,3]))
-  #treemore<-cbind(treemoreV, treemoreVJ, treemoreVJCDR3, treemore[,3], as.data.frame(tabmore[,2]))
-  #colnames(treemore)<-c("V", "VJ", "VJCDR3", "CDR3","freq")
 
-  #tabmore$color<-ut[which(is.na(match(ut$CDR3,tabmore$CDR3))==FALSE), c("color")]
-  tabout<-left_join(tabmore, treecol, by="CDR3")
+  x$usedObj$CDR3elements = unique (tabmore[,'CDR3'], x$usedObj$CDR3elements)
+
+  if ( is.null(color) ){
+    color = data.frame( 'CDR3' = x$usedObj$CDR3elements, color= sample( rainbow(length(x$usedObj$CDR3elements))
+      , length(x$usedObj$CDR3elements) ))
+  }
+
+  if ( is.null (x$usedObj$color)) {
+    x$usedObj$color = color
+  }else if( ! nrow(x$usedObj$color) == length(x$usedObj$CDR3elements)){
+    x$usedObj$color = color
+  }else {
+    color = x$usedObj$color
+  }
+  
+  tabout<-left_join(tabmore, color, by="CDR3")
+  x$usedObj$treeDat = tabout
   tabout
 } )

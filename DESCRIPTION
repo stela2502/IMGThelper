@@ -1,6 +1,6 @@
 Package: IMGThelper
 Title: An R package to access IMGT reult files
-Version: 0.0.0.9000
+Version: 0.0.1
 Authors@R: c(
     person(given = "Stefan",
            family = "Lang",
@@ -19,7 +19,8 @@ Depends:
     R (>= 3.4.0),
     R6,
     treemap,
-    dplyr
+    dplyr,
+    data.table
 Imports: 
 	stringr,
 	methods
