@@ -9,13 +9,19 @@
 #' @title select only productively recombined VDJ segments
 #' @export 
 setGeneric('productive', ## Name
-	function (x, fname=file.path(x$path, '6_Junction.txt'),OK =function(data) { which(data$V.DOMAIN.Functionality == 'productive' & ! data$D.GENE.and.allele == "" & ! data$CDR3.IMGT == "" & ! data$CDR3.IMGT == "NA")} ) { ## Argumente der generischen Funktion
+	function (x, fname=file.path(x$path, '6_Junction.txt'),  OK= function(data) {
+   which( t(data[,'V.DOMAIN.Functionality']) == 'productive' & ! t(data[,'D.GENE.and.allele']) 
+      == "" & ! t(data[,'CDR3.IMGT']) == "" & ! t(data[,'CDR3.IMGT'])  
+    == "NA")
+   } ) { ## Argumente der generischen Funktion
 		standardGeneric('productive') ## der Aufruf von standardGeneric sorgt für das Dispatching
 	}
 )
 
 setMethod('productive', signature = c ('IMGThelper'),
-	definition = function (x, fname='6_Junction.txt' , OK = function(data) { which( t(data[,'V.DOMAIN.Functionality']) == 'productive' & ! t(data[,'D.GENE.and.allele']) == "" & ! t(data[,'CDR3.IMGT']) == "" & ! t(data[,'CDR3.IMGT'])	 == "NA")} ) {
+	definition = function (x, fname='6_Junction.txt', OK = function(data) { 
+    which( data[,'V.DOMAIN.Functionality'] == 'productive' & ! data[,'D.GENE.and.allele'] 
+      == "" & ! data[,'CDR3.IMGT'] == "" & ! data[,'CDR3.IMGT']== "NA")} ) {
 	if ( ! is.null(x$usedObj$productive) ) {
 		print ("returning the previousely analyzed productiuve elements" )
 		return ( x$usedObj$productive )
@@ -24,25 +30,29 @@ setMethod('productive', signature = c ('IMGThelper'),
 	if ( ! is.function( OK ) ) {
   		stop( "OK needs to be a function to select from the read table a list of row ids.")
   	}else {
-  		#browser()
   		ok = OK(data)
   	}
- 	productive <- data[ ok ,c( "V.GENE.and.allele","D.GENE.and.allele", "J.GENE.and.allele", "CDR3.IMGT..AA.", "CDR3.IMGT", 'Sequence.ID', 'V.DOMAIN.Functionality')]
+ 	productive <- data[ ok ,c( "V.GENE.and.allele","D.GENE.and.allele", "J.GENE.and.allele", 
+    "CDR3.IMGT..AA.", "CDR3.IMGT", 'Sequence.ID', 'V.DOMAIN.Functionality',"N1.REGION.nt.nb","N2.REGION.nt.nb" )]
  	
  	if ( nrow(productive) == 0 ){
   		stop("No productive VDJ recombination events detected" )
   	}
 
- 	prod<- as.data.frame(stringr::str_split(productive$V.GENE.and.allele, "\\*", n=2))
-  	colnames(prod)<-c("V","rest")
-  	productive<-cbind(prod$V, productive)
-  	colnames(productive)<-c("a","V.GENE.and.allele","D.GENE.and.allele", "J.GENE.and.allele", "CDR3.IMGT..AA.", "CDR3.IMGT", 'Sequence.ID', 'V.DOMAIN.Functionality')
+  ## now It would be nice to get the mutation status, too:
+  data = open( x, '8_V-REGION-nt-mutation-statistics.txt')
+  productive <- cbind( productive, "V.REGION.Nb.of.nonsilent.mutations" = data[ok, "V.REGION.Nb.of.nonsilent.mutations"] )
 
-  	cell_ids <- table(unlist(lapply(stringr::str_split(productive[,'Sequence.ID'], '_'), function(x){x[1]})))
-  	x$cells$Productive = 0
-  	x$cells$Productive[ match( names(cell_ids), x$cells$cellID) ] = cell_ids
-  	x$usedObj$productive = productive
+ 	#prod<- as.data.frame(stringr::str_split(productive$V.GENE.and.allele, "\\*", n=2))
+  #colnames(prod)<-c("V","rest")
+  #productive<-cbind('V.Name' = prod$V, productive)
+
+  cell_ids <- table(unlist(lapply(stringr::str_split(productive[,'Sequence.ID'], '_'), function(x){x[1]})))
+  x$cells$Productive = 0
+  x$cells$Productive[ match( names(cell_ids), x$cells$cellID) ] = cell_ids
+  x$usedObj$productive = productive
  	productive
+
 } )
 
 

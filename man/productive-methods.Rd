@@ -7,9 +7,9 @@
 \title{select only productively recombined VDJ segments}
 \usage{
 productive(x, fname = file.path(x$path, "6_Junction.txt"),
-  OK = function(data) {     which(data$V.DOMAIN.Functionality ==
-  "productive" & !data$D.GENE.and.allele == "" & !data$CDR3.IMGT == "" &
-  !data$CDR3.IMGT == "NA") })
+  OK = function(data) {     which(t(data[, "V.DOMAIN.Functionality"]) ==
+  "productive" & !t(data[, "D.GENE.and.allele"]) == "" & !t(data[,
+  "CDR3.IMGT"]) == "" & !t(data[, "CDR3.IMGT"]) == "NA") })
 }
 \arguments{
 \item{x}{the IMGThelper object}

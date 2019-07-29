@@ -60,6 +60,8 @@ IMGThelper <- #withFormalClass(
 			cell_ids <- table( cell_ids )
 			self$cells = data.frame(t(cell_ids))[,c(2,3)]
 			colnames(self$cells) = c('cellID', 'nContigs' )
+
+			
 			#Segemnts = Functions = vector( 'character', nrow( self$cells) )
 			#l = 0
 			#for ( id in self$cells[,'cellID']) {
