@@ -7,7 +7,7 @@
 \title{description of function ChordDiagram}
 \usage{
 ChordDiagram(x, ofile, col = NULL, cells = NULL, cutoff = 5,
-  sortFun = function(x) {     sort(x) })
+  sortFun = function(x) {     sort(x) }, plotType = 1)
 }
 \arguments{
 \item{x}{the IMGThelper object}
@@ -21,6 +21,8 @@ ChordDiagram(x, ofile, col = NULL, cells = NULL, cutoff = 5,
 \item{cutoff}{select only re-occuring VDJ recombination events (default 5; see ?recurringProductives)}
 
 \item{sortFun}{a function to sort the Ig/TCR fragments default function(x) {sort(x)}}
+
+\item{plotType}{xolor  the V genes according to the family (deafult 1) or the segment (2)}
 }
 \description{
 Create a Chord diagram of V gene usage
