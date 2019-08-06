@@ -18,5 +18,5 @@ stack(x, fname = "6_Junction.txt", splitAt = 5, ...)
 \item{...}{additional option passed to the tree function}
 }
 \description{
-Create the data structure required for the stached_boxplot
+Create the data structure required for the stacked_boxplot
 }

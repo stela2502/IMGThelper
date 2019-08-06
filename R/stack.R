@@ -2,7 +2,7 @@
 #' @aliases stack,IMGThelper-method
 #' @rdname stack-methods
 #' @docType methods
-#' @description Create the data structure required for the stached_boxplot
+#' @description Create the data structure required for the stacked_boxplot
 #' @param x the IMGThelper object
 #' @param fname the file for the input Junctions default file.path(x$path, '6_Junction.txt')
 #' @param splitAt separate the plot at splitAt (ask Stijn of how to phrase that) default= 5

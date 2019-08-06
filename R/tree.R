@@ -21,26 +21,24 @@ setMethod('tree', signature = c ('IMGThelper'),
     }
 
     more = recurringProductives( x, cutoff= splitAt)
+    #browser()
+    tabmore<-table(more$CDR3AA)
   
-  tabmore<-as.data.frame(table(more$CDR3AA))
-  colnames(tabmore)<-c("CDR3", "Freq")
+    #tabmore<-as.data.frame(table(more$CDR3AA))
+    #colnames(tabmore)<-c("CDR3", "Freq")
 
-  x$usedObj$CDR3elements = unique (tabmore[,'CDR3'], x$usedObj$CDR3elements)
+    x$usedObj$CDR3elements = unique (names(tabmore), x$usedObj$CDR3elements)
+    tabmore<-table(more$CDR3AA)
+    if ( is.null(color) ){
+     color = data.frame( 
+      'CDR3'  = x$usedObj$CDR3elements, 
+      'color' = sample( rainbow(length(x$usedObj$CDR3elements)), length(x$usedObj$CDR3elements)), 
+      'Freq'  = tabmore[ match( x$usedObj$CDR3elements, names(tabmore))]
+     )
+    }
 
-  if ( is.null(color) ){
-    color = data.frame( 'CDR3' = x$usedObj$CDR3elements, color= sample( rainbow(length(x$usedObj$CDR3elements))
-      , length(x$usedObj$CDR3elements) ))
-  }
-
-  if ( is.null (x$usedObj$color)) {
     x$usedObj$color = color
-  }else if( ! nrow(x$usedObj$color) == length(x$usedObj$CDR3elements)){
-    x$usedObj$color = color
-  }else {
-    color = x$usedObj$color
-  }
-  
-  tabout<-left_join(tabmore, color, by="CDR3")
-  x$usedObj$treeDat = tabout
-  tabout
+    #x$usedObj$treeDat = tabout
+    #tabout
+    x$usedObj$color
 } )

@@ -6,12 +6,14 @@
 \alias{recurringProductives,IMGThelper-method}
 \title{description of function recurringProductives}
 \usage{
-recurringProductives(x, cutoff = 5)
+recurringProductives(x, cutoff = 5, cells = NULL)
 }
 \arguments{
 \item{x}{the IMGThelper object}
 
 \item{cutoff}{select only CDR3 elements used more than cutoff times (default=5)}
+
+\item{cells}{the cell IDs to look into (default NULL == all)}
 }
 \description{
 restrict the productives to onle thoise that have been sequenced > cutoff times

@@ -23,12 +23,14 @@ setMethod('productive', signature = c ('IMGThelper'),
     which( data[,'V.DOMAIN.Functionality'] == 'productive' & ! data[,'D.GENE.and.allele'] 
       == "" & ! data[,'CDR3.IMGT'] == "" & ! data[,'CDR3.IMGT']== "NA")} ) {
 	if ( ! is.null(x$usedObj$productive) ) {
-		print ("returning the previousely analyzed productiuve elements" )
+		print ("returning the previousely analyzed productive elements" )
 		return ( x$usedObj$productive )
 	}	
 	data <- open(x, fname )
 	if ( ! is.function( OK ) ) {
-  		stop( "OK needs to be a function to select from the read table a list of row ids.")
+  		stop(paste(c( "OK needs to be a function to select a list of row ids from the read table:\n", 
+        colnames( x), "\n", 
+        x[1,]), collapse=", "))
   	}else {
   		ok = OK(data)
   	}
@@ -46,8 +48,7 @@ setMethod('productive', signature = c ('IMGThelper'),
  	#prod<- as.data.frame(stringr::str_split(productive$V.GENE.and.allele, "\\*", n=2))
   #colnames(prod)<-c("V","rest")
   #productive<-cbind('V.Name' = prod$V, productive)
-
-  cell_ids <- table(unlist(lapply(stringr::str_split(productive[,'Sequence.ID'], '_'), function(x){x[1]})))
+  cell_ids <- table(unlist(lapply(stringr::str_split(as.vector(t(productive[,'Sequence.ID'])), '_'), function(x){x[1]})))
   x$cells$Productive = 0
   x$cells$Productive[ match( names(cell_ids), x$cells$cellID) ] = cell_ids
   x$usedObj$productive = productive

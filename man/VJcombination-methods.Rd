@@ -6,12 +6,14 @@
 \alias{VJcombination,IMGThelper-method}
 \title{Ask Stijn about this function!}
 \usage{
-VJcombination(x, splitAt = 5)
+VJcombination(x, cells = NULL, cutoff = 5)
 }
 \arguments{
 \item{x}{the IMGThelper object}
 
-\item{splitAt}{separate the plot at splitAt (ask Stijn of how to phrase that) default= 5}
+\item{cells}{the cell IDs to look into (default NULL == all)}
+
+\item{cutoff}{select only CDR3 elements used more than cutoff times (default=5; see recurringProductives)}
 }
 \description{
 Function to create VJ_usage.csv files used for the Chord diagrams

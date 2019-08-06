@@ -1,6 +1,6 @@
 Package: IMGThelper
 Title: An R package to access IMGT reult files
-Version: 0.0.1
+Version: 0.0.2
 Authors@R: c(
     person(given = "Stefan",
            family = "Lang",
@@ -20,10 +20,14 @@ Depends:
     R6,
     treemap,
     dplyr,
-    data.table
+    data.table,
+    circlize
 Imports: 
 	stringr,
 	methods
 Suggests: 
-    testthat
+    testthat,
+    knitr,
+    rmarkdown
 RoxygenNote: 6.1.1
+VignetteBuilder: knitr

@@ -6,7 +6,8 @@
 \alias{ChordDiagram,IMGThelper-method}
 \title{description of function ChordDiagram}
 \usage{
-ChordDiagram(x, ofile, col = NULL)
+ChordDiagram(x, ofile, col = NULL, cells = NULL, cutoff = 5,
+  sortFun = function(x) {     sort(x) })
 }
 \arguments{
 \item{x}{the IMGThelper object}
@@ -14,6 +15,12 @@ ChordDiagram(x, ofile, col = NULL)
 \item{ofile}{the pdf out file}
 
 \item{col}{the colors to be used in the plot (leave NULL if unsure!)}
+
+\item{cells}{the cell IDs to look into (default NULL == all)}
+
+\item{cutoff}{select only re-occuring VDJ recombination events (default 5; see ?recurringProductives)}
+
+\item{sortFun}{a function to sort the Ig/TCR fragments default function(x) {sort(x)}}
 }
 \description{
 Create a Chord diagram of V gene usage

@@ -22,12 +22,14 @@ IMGThelper <- #withFormalClass(
 			cells=NULL,
 			version=NULL,
 			usedObj=NULL,
+			name=NULL,
 		print = function(...) {
 			cat (paste("An object of class", paste(collapse="::",rev(class(self))),"\n" ) )
 			cat("reading from path ",self$path,"\n")
+			cat(paste( "with sample name", self$name , "\n" ))
 			cat( paste("with information about" , nrow(self$cells), "cells (or DNA elements)" ,"\n" ))
 		},
-		initialize = function ( path ) {
+		initialize = function ( path, singleCells=FALSE ) {
 			if (!dir.exists( path ) ){
 				stop( "Please I need an existsing path at startup")
 			}
@@ -45,7 +47,7 @@ IMGThelper <- #withFormalClass(
 				stop( paste( "The files", paste( missing, collapse=", "), "is/are missing from the uinput path") )
 			}
 			self$usedObj = list()
-			self$path = path
+			self$path = normalizePath(path)
 			self$version = utils::sessionInfo('IMGThelper')$otherPkgs$IMGThelper$Version
 
 			## now populate the cells table with as much info as you can get..
@@ -61,18 +63,32 @@ IMGThelper <- #withFormalClass(
 			self$cells = data.frame(t(cell_ids))[,c(2,3)]
 			colnames(self$cells) = c('cellID', 'nContigs' )
 
-			
-			#Segemnts = Functions = vector( 'character', nrow( self$cells) )
-			#l = 0
-			#for ( id in self$cells[,'cellID']) {
-			#	l = l +1
-			#	OK =  which(is.na(match( t(sum[,'Sequence.ID']), id))==F)
-			#	Segemnts[l] = c( Segemnts, paste( collapse="; ", t(sum[OK, 'V.GENE.and.allele' ])))
-			#	Functions[l] = c( Functions, paste( collapse="; ", t(sum[OK, 'V.DOMAIN.Functionality' ])))
-			#}
-			#self$cells$V.GENE.and.allele = Segemnts
-			#self$cells$V.DOMAIN.Functionality = Functions
+			self$name = self$sname()
+			if ( nrow(self$cells) != nrow(sum )) {
+				merger <- function(x) { 
+						#browser();
+						bad = which(is.na(match( x, '')) == F); 
+						if(length(bad) > 0 ) { x <- x[-bad]}; 
+						paste(x, cpllapse="&")
+						}
+				V <- lapply( split( sum$V.GENE.and.allele, sum$cell_ids), merger )
+
+				VDom <- lapply( split( sum$V.DOMAIN.Functionality, sum$cell_ids), merger )
+
+				t = table(sum$cellID)
+				self$cells$'sequenceCount' = t[ self$cells$cellID ]
+				self$cells$V.GENE.and.allele = V
+				self$cells$V.DOMAIN.Functionality = VDom
+			}else {
+				self$cells$'sequenceCount' = 1
+				self$cells <- cbind(self$cells, sum[,'V.GENE.and.allele'], sum[, 'V.DOMAIN.Functionality' ] )
+			}
 			self
+		},
+		sname = function( mustWork = FALSE) {
+   			output <- c(strsplit(dirname(normalizePath(self$path,mustWork = mustWork)),
+           	            "/|\\\\")[[1]], basename(self$path))
+           	return( tail(output, n=1))
 		} )
 	)
 

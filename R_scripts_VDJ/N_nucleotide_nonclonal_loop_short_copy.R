@@ -7,7 +7,8 @@ analyzeNOW <- function( fname ) {
   prod<- as.data.frame(str_split_fixed(productive$V.GENE.and.allele, "\\*", n=2))
   colnames(prod)<-c("V","rest")
   productive<-cbind(prod$V, productive)
-  colnames(productive)<-c("a","V.GENE.and.allele","D.GENE.and.allele", "J.GENE.and.allele", "CDR3.IMGT..AA.", "CDR3.IMGT", "N1.REGION.nt.nb","N2.REGION.nt.nb")
+  colnames(productive)<-c("a","V.GENE.and.allele","D.GENE.and.allele", 
+    "J.GENE.and.allele", "CDR3.IMGT..AA.", "CDR3.IMGT", "N1.REGION.nt.nb","N2.REGION.nt.nb")
   
   tab<-as.data.frame(paste(productive[,1],productive[,3],productive[,4],productive[,5],productive[,6], productive[,7],productive[,8],sep="&"))
   colnames(tab)<-c( "lala")
