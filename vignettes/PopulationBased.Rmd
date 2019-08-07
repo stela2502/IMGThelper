@@ -1,0 +1,32 @@
+---
+title: "PopulationBased"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{PopulationBased}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(IMGThelper)
+```
+
+# Population based analysis of IMGT data
+
+This part is based on the R scriptes written by Stijn Vanhee and was implemented as R package by me, Stefan Lang.
+
+The package is expecting the user to have stored single IMGT result table sets in different folders. 
+And therefore the package used only this sample specific path at creation:
+
+```{r}
+##here I need an example dataset ....
+```
+
+

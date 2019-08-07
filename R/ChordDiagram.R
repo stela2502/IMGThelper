@@ -50,12 +50,6 @@ if ( length(which(is.na(col))) > 0 ) {
   x$usedObj$cordCols = c( x$usedObj$cordCols, add)
 }
 
-#print( "The VJ combinations are not ordered here - you can manually reorder the table in slot 'x$usedObj$vjCombination'")
-
-#outeraa<-as.data.frame(matrix(0,16,1))
-#couterlab<-as.data.frame(sample(rainbow(16)))
-#outeraa[,1]<-couterlab[,1]
-
 circlize::chordDiagram(as.matrix(intactplot), annotationTrack = "grid", preAllocateTracks = 2, grid.col = col)
 
 obj = x
@@ -85,20 +79,6 @@ circos.trackPlotRegion(track.index = 2, panel.fun = function(x, y) {
         get.cell.meta.data ("cell.end.degree", sector.index = sector.name,track.index = 1),
         rou1 = 0.8, rou2 = 0.7, lwd=.2, col= col[sector.name], 
         border= col[Vclass])
-       # border= col[sector.name])
-  
-  #for(n in 1:16){
-  #  #browser() ## what are we doing here?! use the same colors over and over!
-  #  grx <- glob2rx(paste("Musmus IGHV",n,"-*", sep=""))
-  #  if(grepl(grx, sector.name)==TRUE){
-  #    sn<-sector.name
-  #    draw.sector( get.cell.meta.data ("cell.start.degree", sector.index = sn, track.index = 1), 
-  #    	get.cell.meta.data ("cell.end.degree", sector.index = sn,track.index = 1),
-  #    	rou1 = 0.8, rou2 = 0.7, lwd=5)
-  #   
-  #  }
-  #}
-  
   
 }, bg.border = NA)
 }

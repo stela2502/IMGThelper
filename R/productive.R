@@ -48,6 +48,7 @@ setMethod('productive', signature = c ('IMGThelper'),
  	#prod<- as.data.frame(stringr::str_split(productive$V.GENE.and.allele, "\\*", n=2))
   #colnames(prod)<-c("V","rest")
   #productive<-cbind('V.Name' = prod$V, productive)
+  browser()
   cell_ids <- table(unlist(lapply(stringr::str_split(as.vector(t(productive[,'Sequence.ID'])), '_'), function(x){x[1]})))
   x$cells$Productive = 0
   x$cells$Productive[ match( names(cell_ids), x$cells$cellID) ] = cell_ids
